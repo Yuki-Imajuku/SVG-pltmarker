@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="100%" width="100%">
+    <circle cx="50" cy="40" r="30" stroke="black" stroke-width="2"/>
+    <ellipse cx="50" cy="40" rx="30" ry="20" style="fill:yellow"/>
+    <g>
+        <line x1="50.0" y1="40.0" x2="30.0" y2="20.0" style="stroke:rgb(255,0,0);stroke-width:2"/>
+        <path d="M 5.0,4.0 L 3.0,2.0"/>
+    </g>
+    <polygon points="0.0,30.0 15.0,7.5 15.0,22.5 30.0,0.0"/>
+    <polyline points="0,100 50,25 50,75 100,0" fill="none" stroke="blue"/>
+</svg>

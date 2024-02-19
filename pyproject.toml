@@ -1,0 +1,54 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "svg_pltmarker"
+description = "A library for generating Matplotlib markers from SVG files."
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+version = "1.0.0"
+authors = [
+    {name = "Yuki Imajuku", email = "yuki.imjk@gmail.com"},
+]
+urls = {repository = "https://github.com/Yuki-Imajuku/SVG-pltmarker"}
+keywords = ["SVG", "graphic", "marker", "matplotlib", "path"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "matplotlib>=3.6.0",
+    "numpy>=1.22.0",
+    "pydantic>=2.0.0",
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "README.md",
+    "LICENSE",
+    "svg_pltmarker",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black~=24.2.0",
+    "flake8~=7.0.0",
+    "isort~=5.13.2",
+    "mypy~=1.8.0",
+    "pytest~=8.0.1",
+]
+
+[tool.isort]
+profile = "black"
