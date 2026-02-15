@@ -1,5 +1,6 @@
 """SVG object parser and high-level SVG wrapper."""
 
+import os
 from collections import deque
 from http import HTTPStatus
 from http.client import HTTPConnection, HTTPException, HTTPSConnection
@@ -211,7 +212,18 @@ class SVGObject:
             if parsed_url.netloc not in {"", "localhost"} or not parsed_url.path:
                 msg = f"Invalid URL: {url}"
                 raise ValueError(msg)
-            return SVGObject._load_from_filepath(unquote(parsed_url.path))
+            filepath = unquote(parsed_url.path)
+            # Windows file URLs are often /C:/...; strip the extra leading slash.
+            min_windows_drive_path_len = 3
+            if (
+                os.name == "nt"
+                and len(filepath) >= min_windows_drive_path_len
+                and filepath[0] == "/"
+                and filepath[1].isalpha()
+                and filepath[2] == ":"
+            ):
+                filepath = filepath[1:]  # Strip leading '/' from '/C:/...'.
+            return SVGObject._load_from_filepath(filepath)
 
         SVGObject._validate_http_url(parsed_url, url)
         data = SVGObject._load_http_bytes(url)

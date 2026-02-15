@@ -135,6 +135,21 @@ def test_init_url_invalid_urls(
         SVGObject(url=svg_url)
 
 
+def test_load_from_url_file_windows_path_is_normalized(monkeypatch: pytest.MonkeyPatch) -> None:
+    called: dict[str, str] = {}
+    original_load_from_filepath = SVGObject._load_from_filepath
+
+    def _mock_load_from_filepath(filepath: str) -> object:
+        called["filepath"] = filepath
+        return original_load_from_filepath(str(file_dir / "test.svg"))
+
+    monkeypatch.setattr("svg_pltmarker.svg_module.svg_object.os.name", "nt", raising=False)
+    monkeypatch.setattr(SVGObject, "_load_from_filepath", staticmethod(_mock_load_from_filepath))
+
+    SVGObject._load_from_url("file:///D:/a/SVG-pltmarker/SVG-pltmarker/tests/files/test.svg")
+    assert called["filepath"] == "D:/a/SVG-pltmarker/SVG-pltmarker/tests/files/test.svg"
+
+
 def test_open_http_connection_returns_connection_by_scheme() -> None:
     http_connection = SVGObject._open_http_connection(urlparse("http://example.com/path"))
     https_connection = SVGObject._open_http_connection(urlparse("https://example.com/path"))

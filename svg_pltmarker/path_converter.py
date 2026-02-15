@@ -571,9 +571,22 @@ class PathConverter:
         center = np.exp(1j * phi) * center_offset + (start + end) / 2
         # Step 4: Compute theta1 and delta_theta
         point1 = z - center_offset
-        theta1 = np.angle(point1.real / radius.real + 1j * point1.imag / radius.imag, deg=True)  # (-180, 180]
         point2 = -z - center_offset
-        theta2 = np.angle(point2.real / radius.real + 1j * point2.imag / radius.imag, deg=True)
+        unit_point1 = point1.real / radius.real + 1j * point1.imag / radius.imag
+        unit_point2 = point2.real / radius.real + 1j * point2.imag / radius.imag
+
+        # Degenerate arcs can yield a zero vector; map that to 0 deg consistently
+        # across NumPy/Python versions.
+        theta1 = (
+            0.0
+            if np.isclose(unit_point1.real, 0.0) and np.isclose(unit_point1.imag, 0.0)
+            else float(np.angle(unit_point1, deg=True))
+        )  # (-180, 180]
+        theta2 = (
+            0.0
+            if np.isclose(unit_point2.real, 0.0) and np.isclose(unit_point2.imag, 0.0)
+            else float(np.angle(unit_point2, deg=True))
+        )
         delta_theta = theta2 - theta1  # (-360, 360)
         if theta1 < 0:
             theta1 += PATH_FULL_ROTATION_DEGREE
