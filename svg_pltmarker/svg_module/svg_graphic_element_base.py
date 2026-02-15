@@ -1,3 +1,5 @@
+"""Common abstract base for all SVG element models."""
+
 from abc import ABC, abstractmethod
 
 from pydantic import BaseModel
@@ -12,8 +14,8 @@ class SVGGraphicElementBase(ABC, BaseModel):
 
         Returns:
             str: A string representing the SVG path representation of the graphic element.
+
         """
-        pass
 
     @abstractmethod
     def svg_repr(self) -> str:
@@ -21,5 +23,5 @@ class SVGGraphicElementBase(ABC, BaseModel):
 
         Returns:
             str: A string representing the SVG element representation of the graphic element.
+
         """
-        pass

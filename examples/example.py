@@ -3,10 +3,8 @@ import numpy as np
 
 from svg_pltmarker import get_marker_from_svg
 
-# Generate Maplotlib marker from SVG file.
-marker = get_marker_from_svg(
-    url="https://upload.wikimedia.org/wikipedia/commons/8/84/Matplotlib_icon.svg"
-)
+# Generate Matplotlib marker from SVG file.
+marker = get_marker_from_svg(url="https://upload.wikimedia.org/wikipedia/commons/8/84/Matplotlib_icon.svg")
 
 # Scatter plot
 fig, ax = plt.subplots(figsize=(10, 10))

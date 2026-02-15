@@ -1,18 +1,24 @@
+.PHONY: help lint format typecheck test build release
+
 help:
-	@echo "lint - check style with flake8"
-	@echo "format - format code with isort and black"
+	@echo "lint - run ruff check"
+	@echo "format - format code with ruff"
+	@echo "typecheck - run ty check"
+	@echo "test - run pytest"
 	@echo "build - package the project"
-	@echo "test - run tests"
 	@echo "release - package and upload a release"
 
 lint:
-	flake8 --exclude=env,venv,build,dist,*.egg-info,.eggs
+	uv run ruff check .
 
 format:
-	isort -rc . && black .
+	uv run ruff format .
+
+typecheck:
+	uv run ty check
 
 test:
-	pytest -v tests/
+	uv run pytest --cov=svg_pltmarker --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=90
 
 build:
 	python -m build --wheel
