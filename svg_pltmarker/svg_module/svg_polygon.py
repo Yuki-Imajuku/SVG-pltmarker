@@ -1,8 +1,9 @@
-import re
+"""SVG polygon model."""
 
 from pydantic import Field
 
-from .svg_graphic_element_base import SVGGraphicElementBase
+from svg_pltmarker.svg_module._point_path_utils import point_list_to_path
+from svg_pltmarker.svg_module.svg_graphic_element_base import SVGGraphicElementBase
 
 
 class SVGPolygon(SVGGraphicElementBase):
@@ -10,6 +11,7 @@ class SVGPolygon(SVGGraphicElementBase):
 
     Attributes:
         points (str): The points of the polygon.
+
     """
 
     points: str = Field(description="The points of the polygon.")
@@ -19,19 +21,15 @@ class SVGPolygon(SVGGraphicElementBase):
 
         Returns:
             str: A string representing the SVG path representation of the polygon.
+
         """
-        points_list = re.findall(r"[-+]?\d*\.?\d+|\.\d+", self.points)
-        assert len(points_list) % 2 == 0 and len(points_list) >= 4
-        path_str = f"M {points_list[0]},{points_list[1]} "
-        for i in range(2, len(points_list), 2):
-            path_str += f"L {points_list[i]},{points_list[i + 1]} "
-        path_str += "Z"
-        return path_str
+        return point_list_to_path(self.points, element_name="polygon", closed=True)
 
     def svg_repr(self) -> str:
         """Return the SVG element representation of the polygon.
 
         Returns:
             str: A string representing the SVG element representation of the polygon.
+
         """
         return f'<polygon points="{self.points}"/>'

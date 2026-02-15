@@ -1,14 +1,23 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "uv-dynamic-versioning"]
 build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["svg_pltmarker"]
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
+
+[tool.uv-dynamic-versioning]
+fallback-version = "0.0.0+unknown"
 
 [project]
 name = "svg_pltmarker"
+dynamic = ["version"]
 description = "A library for generating Matplotlib markers from SVG files."
 readme = "README.md"
 license = {file = "LICENSE"}
-requires-python = ">=3.10"
-version = "1.0.0"
+requires-python = ">=3.10,<3.15"
 authors = [
     {name = "Yuki Imajuku", email = "yuki.imjk@gmail.com"},
 ]
@@ -24,6 +33,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Multimedia :: Graphics",
     "Topic :: Scientific/Engineering :: Visualization",
     "Topic :: Software Development :: Libraries :: Python Modules",
@@ -41,14 +52,124 @@ include = [
     "svg_pltmarker",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
-    "black~=24.2.0",
-    "flake8~=7.0.0",
-    "isort~=5.13.2",
-    "mypy~=1.8.0",
-    "pytest~=8.0.1",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.15.1",
+    "ty>=0.0.17",
 ]
 
-[tool.isort]
-profile = "black"
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = []
+
+
+[tool.ruff]
+src = ["examples", "svg_pltmarker", "tests"]
+line-length = 120
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.ruff.lint]
+select = [
+    "E",      # errors
+    "W",      # warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "N",      # pep8-naming
+    "YTT",    # flake8-2020
+    "ANN",    # flake8-annotations
+    "ASYNC",  # flake8-async
+    "S",      # flake8-bandit
+    "BLE",    # flake8-blind-except
+    "FBT",    # flake8-boolean-trap
+    "B",      # flake8-bugbear
+    "A",      # flake8-builtins
+    "COM",    # flake8-commas
+    "C4",     # flake8-comprehensions
+    "DTZ",    # flake8-datetimez
+    "T10",    # flake8-debugger
+    "EM",     # flake8-errmsg
+    "EXE",    # flake8-executable
+    "FA",     # flake8-future-annotations
+    "INT",    # flake8-gettext
+    "ISC",    # flake8-implicit-str-concat
+    "ICN",    # flake8-import-conventions
+    "LOG",    # flake8-logging
+    "G",      # flake8-logging-format
+    "INP",    # implicit-namespace-package
+    "PIE",    # flake8-pie
+    "T20",    # flake8-print
+    "PYI",    # flake8-pyi
+    "PT",     # flake8-pytest-style
+    "Q",      # flake8-quotes
+    "RSE",    # flake8-raise
+    "RET",    # flake8-return
+    "SLF",    # flake8-self
+    "SIM",    # flake8-simplify
+    "SLOT",   # flake8-slots
+    "TID",    # flake8-tidy-imports
+    "TC",     # flake8-type-checking
+    "ARG",    # flake8-unused-arguments
+    "PTH",    # flake8-use-pathlib
+    "FLY",    # flynt (f-string)
+    "C90",    # mccabe
+    "PERF",   # perflint
+    "D",      # pydocstyle
+    "PGH",    # pygrep-hooks
+    "PL",     # pylint (convention/error/refactor/warning)
+    "UP",     # pyupgrade
+    "FURB",   # refurb
+    "RUF",    # ruff-specific
+    "TRY",    # tryceratops
+]
+ignore = [
+    "COM812", # trailing comma (conflicts with ruff formatter)
+    "ISC001", # implicit string concat (conflicts with ruff formatter)
+    "D203",   # blank line before class docstring (incompatible with D211)
+    "D213",   # multi-line summary on second line (incompatible with D212)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"examples/**/*.py" = [
+    "INP001",  # not a package
+    "T20",     # print statements for demonstration
+    "D",       # docstrings not required in examples
+    "S101",    # assert for demonstrations
+]
+"tests/**/*.py" = [
+    "S101",    # assert is expected in tests
+    "SLF001",  # private member access for testing internals
+    "ARG",     # unused arguments (fixtures etc.)
+    "D",       # docstrings not required in tests
+    "PLR2004", # magic values are fine in tests
+]
+"tests/svg_module/test_svg_rect.py" = [
+    "PLR0913", # explicit parameterized arguments are preferred for readability in this file
+]
+"svg_pltmarker/svg_module/svg_object.py" = [
+    "S318",
+]
+
+[tool.ruff.lint.isort]
+case-sensitive = true
+combine-as-imports = true
+default-section = "third-party"
+known-first-party = ["svg_pltmarker"]
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder"
+]
+split-on-trailing-comma = true
+
+
+[tool.ty.src]
+include = ["examples", "svg_pltmarker", "tests"]
+
+[tool.ty.rules]
+all = "error"

@@ -1,6 +1,8 @@
+"""SVG path model."""
+
 from pydantic import Field
 
-from .svg_graphic_element_base import SVGGraphicElementBase
+from svg_pltmarker.svg_module.svg_graphic_element_base import SVGGraphicElementBase
 
 
 class SVGPath(SVGGraphicElementBase):
@@ -8,6 +10,7 @@ class SVGPath(SVGGraphicElementBase):
 
     Attributes:
         d (str): The path data.
+
     """
 
     d: str = Field(description="The path data.")
@@ -17,6 +20,7 @@ class SVGPath(SVGGraphicElementBase):
 
         Returns:
             str: A string representing the SVG path representation of the path.
+
         """
         return self.d
 
@@ -25,5 +29,6 @@ class SVGPath(SVGGraphicElementBase):
 
         Returns:
             str: A string representing the SVG element representation of the path.
+
         """
         return f'<path d="{self.d}"/>'

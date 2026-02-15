@@ -1,36 +1,35 @@
-import re
+"""SVG polyline model."""
 
 from pydantic import Field
 
-from .svg_graphic_element_base import SVGGraphicElementBase
+from svg_pltmarker.svg_module._point_path_utils import point_list_to_path
+from svg_pltmarker.svg_module.svg_graphic_element_base import SVGGraphicElementBase
 
 
 class SVGPolyline(SVGGraphicElementBase):
-    """A class to represent a SVG polylines.
+    """A class to represent a SVG polyline.
 
     Attributes:
-        points (str): The points of the polylines.
+        points (str): The points of the polyline.
+
     """
 
-    points: str = Field(description="The points of the polylines.")
+    points: str = Field(description="The points of the polyline.")
 
     def path_repr(self) -> str:
-        """Return the SVG path representation of the polylines.
+        """Return the SVG path representation of the polyline.
 
         Returns:
-            str: A string representing the SVG path representation of the polylines.
+            str: A string representing the SVG path representation of the polyline.
+
         """
-        points_list = re.findall(r"[-+]?\d*\.?\d+|\.\d+", self.points)
-        assert len(points_list) % 2 == 0 and len(points_list) >= 4
-        path_str = f"M {points_list[0]},{points_list[1]} "
-        for i in range(2, len(points_list), 2):
-            path_str += f"L {points_list[i]},{points_list[i + 1]} "
-        return path_str[:-1]  # Remove last space
+        return point_list_to_path(self.points, element_name="polyline", closed=False)
 
     def svg_repr(self) -> str:
-        """Return the SVG element representation of the polylines.
+        """Return the SVG element representation of the polyline.
 
         Returns:
-            str: A string representing the SVG element representation of the polylines.
+            str: A string representing the SVG element representation of the polyline.
+
         """
         return f'<polyline points="{self.points}"/>'
